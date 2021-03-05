@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Roboto+Condensed&display=swap"
+    rel="stylesheet" />
+  <link rel="shortcut icon" href="/favicon/favicon.ico" type="image/x-icon">
+  <title>Bongo cat</title>
+</head>
+
+<body class="bongo">
+  <div class="keys">
+    <div data-key="65" class="key" id="1">
+      <kbd>A</kbd>
+      <p class="sound">clap</p>
+    </div>
+    <div data-key="83" class="key" id="2">
+      <kbd>S</kbd>
+      <p class="sound">hihat</p>
+    </div>
+    <div data-key="68" class="key" id="3">
+      <kbd>D</kbd>
+      <p class="sound">kick</p>
+    </div>
+    <div data-key="70" class="key" id="4">
+      <kbd>F</kbd>
+      <p class="sound">openhat</p>
+    </div>
+    <div data-key="71" class="key" id="5">
+      <kbd>G</kbd>
+      <p class="sound">boom</p>
+    </div>
+    <div data-key="72" class="key" id="6">
+      <kbd>H</kbd>
+      <p class="sound">ride</p>
+    </div>
+    <div data-key="74" class="key" id="7">
+      <kbd>J</kbd>
+      <p class="sound">snare</p>
+    </div>
+    <div data-key="75" class="key" id="8">
+      <kbd>K</kbd>
+      <p class="sound">tom</p>
+    </div>
+    <div data-key="76" class="key" id="9">
+      <kbd>L</kbd>
+      <p class="sound">tink</p>
+    </div>
+  </div>
+  <audio data-key="65" src="sounds/clap.wav"></audio>
+  <audio data-key="83" src="sounds/hihat.wav"></audio>
+  <audio data-key="68" src="sounds/kick.wav"></audio>
+  <audio data-key="70" src="sounds/openhat.wav"></audio>
+  <audio data-key="71" src="sounds/boom.wav"></audio>
+  <audio data-key="72" src="sounds/ride.wav"></audio>
+  <audio data-key="74" src="sounds/snare.wav"></audio>
+  <audio data-key="75" src="sounds/tom.wav"></audio>
+  <audio data-key="76" src="sounds/tink.wav"></audio>
+
+  <script>
+    function playSound(e) {
+      if (e.repeat) return;
+
+      const audio = document.querySelector(`audio[data-key="${e.keyCode}"]`);
+      const key = document.querySelector(`.key[data-key="${e.keyCode}"]`);
+      const body = document.querySelector('.bongo');
+      if (!audio) return; //stop the function from running all together
+      audio.currentTime = 0; //rewind to the start
+      audio.play();
+      key.classList.add('playing');
+      bongoStartAnimation(body);
+    }
+
+    function removeTransition(e) {
+      const bongo = document.querySelector('.bongo');
+      if (e.propertyName !== 'transform') return; //skip it if it's not a transform
+      this.classList.remove('playing');
+      removeBongoAnimationBg(bongo);
+    };
+
+    const keys = document.querySelectorAll('.key');
+    keys.forEach(key => key.addEventListener('transitionend', removeTransition));
+    window.addEventListener('keydown', playSound);
+
+    function bongoStartAnimation(bongo) {
+      changeBgRandomly(bongo);
+    }
+
+    function removeBongoAnimationBg(bongo) {
+      if (bongo.classList.contains('bongo-hands-down')) {
+        bongo.classList.remove('bongo-hands-down');
+      }
+
+      if (bongo.classList.contains('bongo-one-hand-down')) {
+        bongo.classList.remove('bongo-one-hand-down');
+      }
+    }
+
+    function changeBgRandomly(bongo) {
+      if (Math.random() < 0.5) {
+        bongo.classList.add('bongo-hands-down')
+      } else {
+        bongo.classList.add('bongo-one-hand-down')
+      }
+    }
+  </script>
+
+</body>
+
+</html>
